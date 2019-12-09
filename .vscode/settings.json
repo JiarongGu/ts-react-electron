@@ -1,0 +1,36 @@
+{
+  "cSpell.words": [
+    "DRAGME",
+    "ESNEXT",
+    "Sider",
+    "Unmount",
+    "antd",
+    "arraybuffer",
+    "bytearray",
+    "devtools",
+    "downlevel",
+    "hjson",
+    "hotmail",
+    "jiaronggu",
+    "modeltype",
+    "nsis",
+    "polyfill",
+    "prestart",
+    "prettierrc",
+    "spectron",
+    "tslib",
+    "typechecking",
+    "webdriverio",
+    "webm",
+    "webp",
+    "woff"
+  ],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "resources/asset": true,
+  }
+}
