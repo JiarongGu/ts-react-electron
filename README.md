@@ -1,4 +1,4 @@
-# Destiny Child Viewer
+# Typescript React Electron
 
 ### A Boilerplate for an Easy Start with TypeScript, React, and Electron.
 
@@ -50,4 +50,4 @@ Also remove `tslint-config-prettier` from the `extends` section in `tslint.json`
 This project was set up from scratch but is heavily influenced by the [Electron React Boilerplate project](https://github.com/chentsulin/electron-react-boilerplate) and [React Redux TypeScript guide](https://github.com/piotrwitek/react-redux-typescript-guide).
 
 ## License
-MIT © [R. Franken](https://github.com/Robinfr)
+MIT © [Jiarong Gu](https://https://github.com/JiarongGu)
