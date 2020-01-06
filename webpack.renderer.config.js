@@ -23,17 +23,6 @@ module.exports = merge.smart(baseConfig, {
   entry: {
     app: ['@babel/polyfill', './index.tsx']
   },
-  resolve: {
-    alias: {
-      '@containers': `${appSrc}/containers`,
-      '@components': `${appSrc}/components`,
-      '@services': `${appSrc}/services`,
-      '@models': `${appSrc}/models`,
-      '@utils': `${appSrc}/utils`,
-      '@sinks': `${appSrc}/sinks`,
-      '@decorators': `${appSrc}/decorators`
-    }
-  },
   module: {
     rules: [
       {
@@ -42,24 +31,7 @@ module.exports = merge.smart(baseConfig, {
         exclude: /node_modules/
       },
       {
-        test: lessRegex,
-        loaders: [
-          {
-            loader: MiniCssExtractPlugin.loader
-          },
-          'css-hot-loader',
-          'css-loader',
-          {
-            loader: 'less-loader',
-            options: {
-              javascriptEnabled: true
-            }
-          }
-        ],
-        exclude: lessModuleRegex
-      },
-      {
-        test: lessModuleRegex,
+        test: /\.s[ac]ss$/,
         loaders: [
           'css-hot-loader',
           'style-loader',
@@ -76,9 +48,12 @@ module.exports = merge.smart(baseConfig, {
             }
           },
           {
-            loader: 'less-loader',
+            loader: 'sass-loader',
             options: {
-              javascriptEnabled: true
+              implementation: require('sass'),
+              sassOptions: {
+                includePaths: ['./src/styles'],
+              },
             }
           }
         ]
@@ -111,6 +86,29 @@ module.exports = merge.smart(baseConfig, {
         loader: 'source-map-loader'
       }
     ]
+  }, 
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          test: path.resolve(process.cwd(), 'node_modules'),
+          name: 'vendor',
+          enforce: true,
+          priority: 10
+        },
+        utils: {
+          test: /\.js$/,
+          chunks: 'initial',
+          name: 'common',
+          minSize: 0
+        }
+      }
+    },
+    runtimeChunk: {
+      name: 'manifest'
+    }
   },
   plugins: [
     new webpack.NamedModulesPlugin(),
@@ -127,8 +125,7 @@ module.exports = merge.smart(baseConfig, {
     }),
     new CopyWebpackPlugin([{ from: appPublic, to: outDir }], { ignore: ['index.html'] }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-      'process.env.APP_RESOURCES': JSON.stringify(appResources)
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     })
   ]
 });

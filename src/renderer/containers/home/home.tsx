@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, InputNumber } from 'antd';
 import * as classNames from 'classnames';
 
-import * as styles from './home.module.less';
+import * as styles from './home.scss';
 import { HomeSink } from './home-sink';
 import { useSink } from 'redux-sink';
 

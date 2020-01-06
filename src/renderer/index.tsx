@@ -6,28 +6,22 @@ import { SinkFactory } from 'redux-sink';
 import { Router } from 'react-router';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { App } from './app';
-import { createNavigationHistory } from '@sinks/navigation/navigation-sink';
-import { Home } from '@containers/home';
+import { App } from '@containers';
+import { WindowSink, NavigationSink } from '@sinks';
 
 import 'antd/dist/antd.css';
+import '@styles/global.scss';
+import { homeRoute } from './containers/home/home-route';
 
 const store = SinkFactory.createStore({
   useTrigger: true,
   devToolOptions: { devToolCompose: composeWithDevTools }
 });
 
-const history = createNavigationHistory([
-  {
-    key: 'home',
-    icon: 'home',
-    link: '/home',
-    props: {
-      path: '/home',
-      component: Home
-    }
-  }
-]);
+// initialize sinks
+WindowSink.load(window);
+
+const history = NavigationSink.createHistory([homeRoute]);
 
 ReactDOM.render(
   <AppContainer>

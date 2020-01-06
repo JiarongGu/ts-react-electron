@@ -2,8 +2,7 @@ import { createBrowserHistory, History, Location } from 'history';
 import { matchPath } from 'react-router';
 import { effect, sink, SinkFactory, state, trigger } from 'redux-sink';
 
-import { ActiveRoute } from '@models/navigation/active-route';
-import { RouteModel } from '@models/navigation/route-model';
+import { ActiveRoute, RouteModel } from '@renderer/models';
 
 @sink('navigation')
 export class NavigationSink {
@@ -12,7 +11,7 @@ export class NavigationSink {
   @state public activeRoute!: ActiveRoute;
 
   @state public routes: Array<RouteModel> = [];
-
+  
   @effect
   public addRoute(route: RouteModel) {
     this.routes.push(route);
@@ -53,14 +52,13 @@ export class NavigationSink {
 
   private getMatchedRoute(routes: Array<RouteModel>, location: Location): ActiveRoute | undefined {
     for (const route of routes) {
-      const props = Object.assign({}, route.props, { path: route.link });
-      const matches = matchPath(location.pathname, props);
+      const matches = matchPath(location.pathname, route.config);
 
       if (matches) {
         const keys = [route.key];
         let params = matches.params;
         let url = matches.url;
-        let name = route.name || route.key;
+        let model = route;
 
         if (route.routes) {
           const subMatchedRoute = this.getMatchedRoute(route.routes, location);
@@ -69,26 +67,26 @@ export class NavigationSink {
             keys.push(...subMatchedRoute.keys);
             params = Object.assign(params, subMatchedRoute.params);
             url = subMatchedRoute.url;
-            name = subMatchedRoute.name;
+            model = subMatchedRoute.model;
           }
         }
-        return { keys, url, params, name, queryParams: {} };
+        return { keys, url, params, model, queryParams: {} };
       }
     }
   }
+
+  static createHistory = (routes?: Array<RouteModel>) => {
+    const history = createBrowserHistory();
+    const navigation = SinkFactory.getSink(NavigationSink);
+  
+    if (routes) {
+      navigation.addRoutes(routes);
+    }
+  
+    history.listen(location => (navigation.location = location));
+    navigation.history = history;
+    navigation.location = history.location;
+  
+    return history;
+  };
 }
-
-export const createNavigationHistory = (routes?: Array<RouteModel>) => {
-  const history = createBrowserHistory();
-  const navigation = SinkFactory.getSink(NavigationSink);
-
-  if (routes) {
-    navigation.addRoutes(routes);
-  }
-
-  history.listen(location => (navigation.location = location));
-  navigation.history = history;
-  navigation.location = history.location;
-
-  return history;
-};

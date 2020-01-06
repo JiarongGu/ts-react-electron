@@ -1,5 +1,5 @@
 import { effect, sink, state, trigger } from 'redux-sink';
-import { ActiveRoute } from '@models/navigation/active-route';
+import { ActiveRoute } from '@renderer/models';
 
 @sink('home')
 export class HomeSink {
