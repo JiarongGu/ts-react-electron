@@ -158,7 +158,7 @@
     "@types/fs-extra": "^8.0.1",
     "@types/lowdb": "^1.0.9",
     "antd": "^3.26.6",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "fs-extra": "^8.1.0",
     "lodash": "^4.17.15",
